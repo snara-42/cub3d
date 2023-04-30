@@ -99,7 +99,12 @@ int	init_img(t_mlx *mlx)
 	for (int i=0; i<4; i++)
 	{
 		t_img	*img = &mlx->texture[i];
-		//img->ptr = mlx_xpm_file_to_image(mlx->mlx, "", &img->size.x, &img->size.y);
+#if 1
+		img->ptr = mlx_xpm_file_to_image(mlx->mlx,
+			(char*[]){"cubfiles/xpm/p_ji_w_1.xpm","cubfiles/xpm/p_ji_n_1.xpm","cubfiles/xpm/p_ji_e_1.xpm","cubfiles/xpm/p_ji_s_1.xpm"}[i],
+				&img->size.x, &img->size.y);
+		img->addr = mlx_get_data_addr(img->ptr, &img->bpp, &img->size_line, &img->endian);
+#else
 		img->size = ivec(TEX_W, TEX_H);
 		img->ptr = mlx_new_image(mlx->mlx, img->size.x, img->size.y);
 		img->addr = mlx_get_data_addr(img->ptr, &img->bpp, &img->size_line, &img->endian);
@@ -114,6 +119,7 @@ int	init_img(t_mlx *mlx)
 			put_pixel(&mlx->texture[1], x, y, 256 * xorcolor); //xor green
 			put_pixel(&mlx->texture[2], x, y, 0x100 * xycolor + 0x10000 * ycolor); //sloped yellow gradient
 			put_pixel(&mlx->texture[3], x, y, xorcolor + 256 * xorcolor + 65536 * xorcolor); //xor greyscale
+#endif
 		}
 	for (int i=0; i<4; i++)
 	{
@@ -227,28 +233,25 @@ int	draw(t_mlx *mlx)
 				if (world_ati(world, map_pos) != MAP_EMPTY)
 					break ;
 			}
-			wall_dist = (side == 1 || side == 3) ? side_dist.x - delta_dist.x : side_dist.y - delta_dist.y;
+			wall_dist = (side % 2 == 1) ? side_dist.x - delta_dist.x : side_dist.y - delta_dist.y;
 		}
 		{
+			t_img	*img = &mlx->texture[side - 1];
 			int		line_h = (int)(size.y / wall_dist);
 			t_ivec	start = ivec(x, MAX(0, size.y / 2 - line_h / 2));
 			t_ivec	end = ivec(x, MIN(size.y - 1, size.y / 2 + line_h / 2));
 
-			//draw_vline(&mlx->img,\
-				ivec(x, MAX(0, size.y / 2 - line_h / 2)),\
-				ivec(x, MIN(size.y - 1, size.y / 2 + line_h / 2)),\
-				(int[]){0x00ffffff,0x00ffff00,0x00ff00ff,0x0000ffff,0x0000ff00}[side]); //TODO
 			double	wall_x = (side % 2 == 0) ? player.x + wall_dist * ray_dir.x : player.y + wall_dist * ray_dir.y;
 			wall_x -= floor(wall_x);
-			t_ivec	tex = ivec((int)(wall_x * TEX_W), 0);
-			//if ((side % 2 == 0 && ray_dir.x > 0) || (side % 2 == 1 && ray_dir.y < 0)) tex.x = TEX_W - tex.x - 1;
-			double	step = (double)TEX_H / line_h;
+			t_ivec	tex = ivec((int)(wall_x * img->size.x), 0);
+			if ((side == 3) || (side == 4)) tex.x = img->size.x - tex.x - 1;
+
+			double	step = (double)img->size.y / line_h;
 			double	tex_pos = (start.y - SCREEN_H / 2. + line_h / 2.) * step;
 			for (int y = start.y; y < end.y; ++y)
 			{
-				tex.y = (int)round(tex_pos); //& TEX_H-1;
+				tex.y = (int)round(tex_pos);
 				tex_pos += step;
-				t_img	*img = &mlx->texture[side - 1];
 				t_color	color = get_pixel(img, tex.x, tex.y);
 				put_pixel(&mlx->img, x, y, color);
 			}
@@ -313,7 +316,14 @@ void	loop(t_mlx *mlx)
 int	main()
 {
 	t_mlx	mlx = {};
-#define mlx (&mlx)
-	init(mlx);
-	loop(mlx);
+	init(&mlx);
+	loop(&mlx);
 }
+
+#if 0
+__attribute__((destructor))
+void	end(void)
+{
+	system("leaks -q a.out");
+}
+#endif
