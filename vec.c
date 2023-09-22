@@ -6,6 +6,7 @@ t_ivec	ivec(int x, int y)
 {
 	return ((t_ivec){x, y});
 }
+
 bool	ivec_in(t_ivec v, t_ivec size)
 {
 	return (0 <= v.x && v.x < size.x && 0 <= v.y && v.y < size.y);
@@ -44,5 +45,5 @@ t_vec	vec_div(t_vec a, t_vec b)
 t_vec	vec_rot(t_vec v, double angle)
 {
 	return (vec(v.x * cos(angle) - v.y * sin(angle),
-				v.x * sin(angle) + v.y * cos(angle)));
+			v.x * sin(angle) + v.y * cos(angle)));
 }
