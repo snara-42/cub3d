@@ -16,6 +16,8 @@
 # define MAP_EMPTY '0'
 # define MAP_WALL '1'
 
+#define COLOR_DFL ~0u
+
 enum	e_dir
 {
 	E_L = 0,
