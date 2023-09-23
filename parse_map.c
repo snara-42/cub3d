@@ -6,7 +6,7 @@
 /*   By: subaru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 09:05:55 by subaru            #+#    #+#             */
-/*   Updated: 2023/09/23 09:05:57 by subaru           ###   ########.fr       */
+/*   Updated: 2023/09/23 21:56:43 by subaru           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,5 +117,6 @@ bool	parse_map(t_ctx *ctx, int fd)
 	if (!is_valid_map(ctx->map))
 		or_exit(NULL, "map invalid");
 	ctx->player = get_start_pos(ctx->map);
+	ctx->map[(int)ctx->player.pos.y][(int)ctx->player.pos.x] = MAP_EMPTY;
 	return (true);
 }
