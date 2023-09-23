@@ -16,7 +16,10 @@
 # define MAP_EMPTY '0'
 # define MAP_WALL '1'
 
-#define COLOR_DFL ~0u
+# define COLOR_DFL ~0u
+
+typedef uint32_t		t_color;
+typedef char			t_map[1024][1024];
 
 enum	e_dir
 {
@@ -24,7 +27,6 @@ enum	e_dir
 	E_U = 1,
 	E_R = 2,
 	E_D = 3,
-
 	E_WE = 0,
 	E_NO = 1,
 	E_EA = 2,
@@ -35,10 +37,6 @@ enum	e_color
 	E_CEIL = 0,
 	E_FLOOR = 1,
 };
-
-typedef uint32_t	t_color;
-
-typedef char	t_map[MAP_W][MAP_H];
 
 struct	s_img
 {

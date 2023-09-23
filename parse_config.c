@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_config.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: subaru <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/23 09:05:51 by subaru            #+#    #+#             */
+/*   Updated: 2023/09/23 09:05:53 by subaru           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 #include "libft.h"
 #include <mlx.h>
@@ -13,11 +25,6 @@ static t_color	rgb_to_color(t_color rgb[3])
 	return (r << 16 | g << 8 | b << 0);
 }
 
-static bool	in_range(int n, int min, int max)
-{
-	return (min <= n && n < max);
-}
-
 t_color	parse_color(t_color *p, const char *s)
 {
 	t_color	rgb[3];
@@ -26,7 +33,8 @@ t_color	parse_color(t_color *p, const char *s)
 		or_exit(NULL, "duplicate color configuration");
 	if (ft_sscanf(s, "%u,%u,%u", &rgb[0], &rgb[1], &rgb[2]) != 3)
 		or_exit(NULL, "invalid color configuration");
-	if (!(in_range(rgb[0], 0, 256) && in_range(rgb[1], 0, 256) && in_range(rgb[2], 0, 256)))
+	if (!(in_range(rgb[0], 0, 256) && in_range(rgb[1], 0, 256)
+			&& in_range(rgb[2], 0, 256)))
 		or_exit(NULL, "color out of range");
 	*p = rgb_to_color(rgb);
 	return (*p);
@@ -35,7 +43,7 @@ t_color	parse_color(t_color *p, const char *s)
 bool	is_valid_config(t_ctx *ctx)
 {
 	if (!(ctx->mlx.texture[0].ptr && ctx->mlx.texture[1].ptr
-		&& ctx->mlx.texture[2].ptr && ctx->mlx.texture[3].ptr))
+			&& ctx->mlx.texture[2].ptr && ctx->mlx.texture[3].ptr))
 		return (false);
 	if (ctx->color[0] == COLOR_DFL || ctx->color[1] == COLOR_DFL)
 		return (false);

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_map.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: subaru <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/23 09:05:55 by subaru            #+#    #+#             */
+/*   Updated: 2023/09/23 09:05:57 by subaru           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 #include "libft.h"
 
@@ -41,20 +53,19 @@ static bool	floodfill(const t_map map, t_map filled, int x, int y)
 	if (filled[y][x] || map[y][x] == MAP_WALL)
 		return (true);
 	filled[y][x] = true;
-	is_surrounded = 
-		floodfill(map, filled, x - 1, y)
-		&& floodfill(map, filled, x + 1, y)
-		&& floodfill(map, filled, x, y - 1)
-		&& floodfill(map, filled, x, y + 1);
+	is_surrounded = (floodfill(map, filled, x - 1, y)
+			&& floodfill(map, filled, x + 1, y)
+			&& floodfill(map, filled, x, y - 1)
+			&& floodfill(map, filled, x, y + 1));
 	return (is_surrounded);
 }
 
 bool	is_map_surrounded(const t_map map)
 {
 	const t_player	start = get_start_pos(map);
-	const bool		is_surrounded = floodfill(
-			map, (t_map){}, start.pos.x, start.pos.y);
+	bool			is_surrounded;
 
+	is_surrounded = floodfill(map, (t_map){}, start.pos.x, start.pos.y);
 	return (is_surrounded);
 }
 
@@ -62,7 +73,6 @@ bool	is_valid_map(const t_map map)
 {
 	size_t	x;
 	size_t	y;
-	char	c;
 	size_t	configured;
 
 	configured = 0;
@@ -72,10 +82,9 @@ bool	is_valid_map(const t_map map)
 		x = 0;
 		while (x < MAP_W && map[y][x])
 		{
-			c = map[y][x];
-			if (!ft_strchr("01 NSEW", c))
+			if (!ft_strchr("01 NSEW", map[y][x]))
 				or_exit(NULL, "invalid character in map");
-			if (ft_strchr("NSEW", c) && configured++)
+			if (ft_strchr("NSEW", map[y][x]) && configured++)
 				or_exit(NULL, "duplicate start pos");
 			x++;
 		}

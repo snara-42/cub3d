@@ -6,9 +6,11 @@
 /*   By: subaru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 01:42:29 by subaru            #+#    #+#             */
-/*   Updated: 2023/09/23 01:45:25 by subaru           ###   ########.fr       */
+/*   Updated: 2023/09/23 09:05:28 by subaru           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "libft.h"
 
 #include <stdarg.h>
 #include <stdbool.h>
@@ -16,10 +18,7 @@
 
 #include <stdio.h>
 
-int		ft_sscanf(const char *s, const char *fmt, ...);
-
 typedef unsigned int	t_uint;
-char	*ft_strtou_base(const char *s, unsigned int *np, const char *dig);
 
 int	ft_vsscanf(const char *s, const char *f, va_list ap)
 {
