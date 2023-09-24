@@ -6,7 +6,7 @@
 #    By: louisnop <louisnop@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/28 13:12:23 by louisnop          #+#    #+#              #
-#    Updated: 2023/09/25 04:36:38 by subaru           ###   ########.fr        #
+#    Updated: 2023/09/25 05:16:11 by subaru           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,7 @@ $(OBJDIR)/%.o: %.c
 
 clean: ## rm -f $(OBJS) $(DEPS)
 	rm -f $(OBJS) $(DEPS)
+
 fclean: clean ## rm -f $(OBJS) $(DEPS) $(NAME)
 	rm -f $(NAME)
 
@@ -48,7 +49,7 @@ debug: re ## add debug flags
 debug: CFLAGS += -DDEBUG -g -fsanitize=address -fsanitize=undefined
 
 test: 
-	zsh -c 'for f in ./test/*.cub ; { echo "$$f"; ./$(NAME) "$$f" }'
+	zsh -c 'for f in ./cubfiles/test*.cub ; { echo "$$f"; ./$(NAME) "$$f" }'
 
 help: ## show this message
 	@grep -E '^\w+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-16s\033[0m %s\n", $$1, $$2}'
