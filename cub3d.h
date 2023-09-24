@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub3d.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: subaru <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/25 03:26:15 by subaru            #+#    #+#             */
+/*   Updated: 2023/09/25 03:27:01 by subaru           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CUB3D_H
 # define CUB3D_H
 
@@ -102,7 +114,7 @@ struct	s_ctx
 };
 typedef struct s_ctx	t_ctx;
 
-//////////////////////
+//////////////////////////////////////////
 
 bool	parse_config(t_ctx *ctx, int fd);
 bool	parse_map(t_ctx *ctx, int fd);
@@ -112,10 +124,8 @@ void	print_ctx(const t_ctx *ctx);
 t_vec	try_move(const t_map map, t_vec pos, t_vec dir);
 int		map_at_i(const t_map map, t_ivec pos);
 
-
 void	put_pixel(const t_img *img, int x, int y, t_color color);
 t_color	get_pixel(const t_img *img, int x, int y);
-
 void	draw_background(const t_ctx *ctx);
 
 int		f_exit(t_ctx *ctx);
