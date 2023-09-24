@@ -20,6 +20,8 @@
 # define printf (void)
 #endif
 
+#define EPSILON 0.000001
+
 t_vec	try_move(const t_map map, t_vec pos, t_vec dir);
 int		map_at_i(const t_map map, t_ivec pos);
 
@@ -30,19 +32,41 @@ t_color	get_pixel(const t_img *img, int x, int y);
 
 void	draw_background(const t_ctx *ctx);
 
-int	draw(const t_ctx *ctx)
+typedef enum e_dir	t_e_dir;
+
+struct s_ray
+{
+	t_vec	dir;
+	t_e_dir	side;
+	double	wall_dist;
+	t_vec	camera;
+	t_vec	plane;
+	t_vec	delta_dist;
+	t_ivec	step;
+	t_ivec	pos_i;
+};
+typedef struct s_ray	t_ray;
+
+t_ray	init_ray(const t_ctx *ctx)
+{
+	t_ray	r;
+
+	r = (t_ray){};
+	return (r);
+}
+
+int	f_draw(const t_ctx *ctx)
 {
 	const t_mlx *const	mlx = &ctx->mlx;
-	const t_img *const	img = &mlx->img;
 	const t_vec *const	pos = &ctx->player.pos;
 	const t_vec *const	dir = &ctx->player.dir;
 	const t_ivec		size = mlx->img.size;
 
 	draw_background(ctx);
+
 	for (int x = 0; x < size.x; ++x)
 	{
-		int		side;
-		t_ivec	map_pos = ivec(pos->x, pos->y);
+		t_e_dir	side;
 		t_vec	ray_dir;
 		double	wall_dist;
 		{
@@ -51,6 +75,7 @@ int	draw(const t_ctx *ctx)
 			ray_dir = vec_add(*dir, vec_sca(plane, camera.x));
 			const t_vec	delta_dist = vec(fabs(1.0 / ray_dir.x), fabs(1.0 / ray_dir.y));
 			const t_ivec	step = ivec(copysign(1.0, ray_dir.x), copysign(1.0, ray_dir.y));
+			t_ivec	map_pos = ivec(pos->x, pos->y);
 
 			t_vec	side_dist = vec_mul(vec(fabs(map_pos.x + (ray_dir.x >= 0) - pos->x), fabs(map_pos.y + (ray_dir.y >= 0) - pos->y)), delta_dist);
 			while (1)
@@ -59,31 +84,31 @@ int	draw(const t_ctx *ctx)
 				{
 					side_dist.x += delta_dist.x;
 					map_pos.x += step.x;
-					side = 2 + step.x;
+					side = (int[]){E_WE, E_EA}[ray_dir.x > 0];// 1 + step.x;
 				}
 				else
 				{
 					side_dist.y += delta_dist.y;
 					map_pos.y += step.y;
-					side = 3 - step.y;
+					side = (int []){E_NO, E_SO}[ray_dir.y < 0];//2 - step.y;
 				}
 				if (map_at_i(ctx->map, map_pos) != MAP_EMPTY)
 					break ;
 			}
-			wall_dist = (side % 2 == 1) ? side_dist.x - delta_dist.x : side_dist.y - delta_dist.y;
+			wall_dist = (side == E_WE || side == E_EA) ? side_dist.x - delta_dist.x : side_dist.y - delta_dist.y;
 		}
 		{
-			const t_img	*img = &mlx->texture[side - 1];
-			int		line_h = (int)(size.y / wall_dist);
-			t_ivec	start = ivec(x, MAX(0, size.y / 2 - line_h / 2));
-			t_ivec	end = ivec(x, MIN(size.y - 1, size.y / 2 + line_h / 2));
 
-			double	wall_x = (side % 2 == 0) ? pos->x + wall_dist * ray_dir.x : pos->y + wall_dist * ray_dir.y;
+			double	wall_x = (side == E_WE || side == E_EA) ? pos->y + wall_dist * ray_dir.y : pos->x + wall_dist * ray_dir.x;
 			wall_x -= floor(wall_x);
+			const t_img	*img = &mlx->texture[side];
 			t_ivec	tex = ivec((int)(wall_x * img->size.x), 0);
-			if ((side == 3) || (side == 4))
+			if ((side == E_EA) || (side == E_SO))
 				tex.x = img->size.x - tex.x - 1;
 
+			int		line_h = (int)(size.y / (wall_dist + EPSILON));
+			t_ivec	start = ivec(x, MAX(0, size.y / 2 - line_h / 2));
+			t_ivec	end = ivec(x, MIN(size.y - 1, size.y / 2 + line_h / 2));
 			double	step = (double)img->size.y / line_h;
 			double	tex_pos = (start.y - SCREEN_H / 2. + line_h / 2.) * step;
 			for (int y = start.y; y < end.y; ++y)
@@ -122,7 +147,7 @@ int	f_key_hook(int key, t_ctx *ctx)
 		f_exit(ctx);
 	else if (key == XK_Left || key == XK_Right)
 	{
-		*dir = vec_rot(*dir, (double []){-M_PI_4, M_PI_4}[key == XK_Left]);
+		*dir = vec_rot(*dir, (double []){-M_PI_4, M_PI_4}[key == XK_Left] / 4.0);
 	}
 	else if (key == XK_w || key == XK_a || key == XK_s || key == XK_d
 			|| key == XK_Up || key == XK_Down)
@@ -131,7 +156,7 @@ int	f_key_hook(int key, t_ctx *ctx)
 				vec_sca(vec_rot(*dir, key_to_rad(key)), 0.5));
 	}
 	printf("k=%d p=(%f,%f)(%f,%f)\n", key, dir->x, dir->y, pos->x, pos->y);
-	draw(ctx);
+	f_draw(ctx);
 	return (0);
 }
 

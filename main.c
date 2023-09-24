@@ -6,7 +6,7 @@
 /*   By: subaru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 09:04:01 by subaru            #+#    #+#             */
-/*   Updated: 2023/09/23 22:32:22 by subaru           ###   ########.fr       */
+/*   Updated: 2023/09/24 19:24:35 by subaru           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ static void	print_ctx(const t_ctx *ctx)
 
 int	f_exit(t_ctx *ctx);
 int	f_key_hook(int key, t_ctx *ctx);
+int	f_draw(const t_ctx *ctx);
 
 static int	init_mlx(t_mlx *mlx)
 {
@@ -79,9 +80,10 @@ static int	hook_mlx(t_ctx *ctx)
 {
 	t_mlx *const	mlx = &ctx->mlx;
 
+	mlx_do_key_autorepeaton(mlx->mlx);
 	mlx_hook(mlx->win, DestroyNotify, StructureNotifyMask, &f_exit, ctx);
 	mlx_key_hook(mlx->win, &f_key_hook, ctx);
-	mlx_do_key_autorepeaton(mlx->mlx);
+	mlx_loop_hook(mlx->mlx, f_draw, ctx);
 	return (0);
 }
 
