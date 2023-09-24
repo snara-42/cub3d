@@ -6,24 +6,29 @@
 #    By: louisnop <louisnop@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/28 13:12:23 by louisnop          #+#    #+#              #
-#    Updated: 2023/09/25 04:07:54 by subaru           ###   ########.fr        #
+#    Updated: 2023/09/25 04:36:38 by subaru           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = cub3D
 SRCS = draw.c draw_util.c ft_parseint.c ft_sscanf.c ft_str.c get_next_line.c main.c or_exit.c parse.c parse_config.c parse_map.c play_key_hook.c play_move.c vec_1.c vec_2.c
+
 OBJDIR = ./obj
+MLXDIR = ./mlx
+X11DIR = /usr/X11
 OBJS = $(SRCS:%.c=$(OBJDIR)/%.o)
 DEPS = $(SRCS:%.c=$(OBJDIR)/%.d)
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -MMD -MP $(INCS)
-INCS = -I./mlx 
-MLXFLAGS = -Lmlx -lmlx -L/usr/X11/lib -lX11 -lXext
+INCS = -I$(MLXDIR) -I$(X11DIR)/include
+MLXFLAGS = -L$(MLXDIR) -lmlx -L$(X11DIR)/lib -lX11 -lXext
+
 
 all: $(NAME) ## make $(NAME)
 
 $(NAME): $(OBJS)
+	make -C $(MLXDIR)
 	$(CC) $(CFLAGS) $(MLXFLAGS) -o $@ $^
 
 $(OBJDIR)/%.o: %.c
@@ -36,6 +41,8 @@ fclean: clean ## rm -f $(OBJS) $(DEPS) $(NAME)
 	rm -f $(NAME)
 
 re: fclean all ## recompile everything
+
+bonus: all
 
 debug: re ## add debug flags
 debug: CFLAGS += -DDEBUG -g -fsanitize=address -fsanitize=undefined
