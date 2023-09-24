@@ -6,7 +6,7 @@
 /*   By: subaru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 09:04:01 by subaru            #+#    #+#             */
-/*   Updated: 2023/09/23 19:45:50 by subaru           ###   ########.fr       */
+/*   Updated: 2023/09/25 03:20:18 by subaru           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,24 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-bool	parse_config(t_ctx *ctx, int fd);
-bool	parse_map(t_ctx *ctx, int fd);
+void	print_ctx(const t_ctx *ctx)
+{
+	const t_player	p = ctx->player;
+	const t_img		*img;
+	size_t			i;
+
+	i = -1;
+	while (++i < 4)
+	{
+		img = &ctx->mlx.texture[i];
+		printf("texture [%p](%u*%u)\n", img->addr, img->size.x, img->size.y);
+	}
+	printf("C=%#06x F=%#06x\n", ctx->color[0], ctx->color[1]);
+	printf("player = (%f,%f),(%f,%f)\n", p.pos.x, p.pos.y, p.dir.x, p.dir.y);
+	i = -1;
+	while (++i < MAP_H)
+		printf("%s%s", ctx->map[i], &"\n"[!ctx->map[i][0]]);
+}
 
 int	parse_file(t_ctx *ctx, const char *path)
 {
@@ -42,5 +58,6 @@ int	parse_file(t_ctx *ctx, const char *path)
 	parse_config(ctx, fd);
 	parse_map(ctx, fd);
 	close(fd);
+	print_ctx(ctx);
 	return (0);
 }

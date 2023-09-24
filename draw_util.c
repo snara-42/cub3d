@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   play_draw.c                                        :+:      :+:    :+:   */
+/*   draw_util.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: subaru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 22:35:04 by subaru            #+#    #+#             */
-/*   Updated: 2023/09/25 00:57:09 by subaru           ###   ########.fr       */
+/*   Updated: 2023/09/25 03:22:49 by subaru           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_color	get_pixel(const t_img *img, int x, int y)
 	return (~0);
 }
 
-static void	draw_vline(const t_img *img, t_ivec a, t_ivec b, t_color color)
+void	draw_vline(const t_img *img, t_ivec a, t_ivec b, t_color color)
 {
 	const t_ivec	size = img->size;
 	int				y;
@@ -52,7 +52,7 @@ static void	draw_vline(const t_img *img, t_ivec a, t_ivec b, t_color color)
 	}
 }
 
-static void	draw_hline(const t_img *img, t_ivec a, t_ivec b, t_color color)
+void	draw_hline(const t_img *img, t_ivec a, t_ivec b, t_color color)
 {
 	const t_ivec	size = img->size;
 	int				x;
