@@ -1,12 +1,14 @@
-WE   cubfiles/xpm/p_ji_w_1.xpm
-NO   cubfiles/xpm/p_ji_n_1.xpm
-EA ./cubfiles/xpm/p_ji_e_1.xpm
-SO ./cubfiles/xpm/p_ji_s_1.xpm
+EA   cubfiles/xpm/p_ji_w_1.xpm
+SO   cubfiles/xpm/p_ji_n_1.xpm
+WE ./cubfiles/xpm/p_ji_e_1.xpm
+NO ./cubfiles/xpm/p_ji_s_1.xpm
 
 C 0,186,188
 F 237, 129, 121
-11111
-10001
-10101
-1E001
-11111
+1111111
+1000101
+1100001
+100S011
+1000011
+1011001
+1111111

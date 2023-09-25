@@ -6,7 +6,7 @@
 /*   By: subaru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 03:20:41 by subaru            #+#    #+#             */
-/*   Updated: 2023/09/25 03:22:42 by subaru           ###   ########.fr       */
+/*   Updated: 2023/09/25 13:31:42 by subaru           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	init_ray(t_ray *r, const t_ctx *ctx, int x)
 
 	*r = (t_ray){};
 	r->camera = vec(x / (double)ctx->mlx.img.size.x * 2.0 - 1.0, 0);
-	r->plane = vec_sca(vec_rot(p.dir, -M_PI_2), 0.75);
+	r->plane = vec_sca(vec_rot(p.dir, M_PI_2), 0.75);
 	r->dir = vec_add(p.dir, vec_sca(r->plane, r->camera.x));
 	r->delta_dist = vec(fabs(1.0 / r->dir.x), fabs(1.0 / r->dir.y));
 	r->step = ivec(copysign(1.0, r->dir.x), copysign(1.0, r->dir.y));
@@ -51,7 +51,7 @@ void	simulate_ray(t_ray *r, const t_ctx *ctx)
 		{
 			r->side_dist.x += r->delta_dist.x;
 			r->map_pos.x += r->step.x;
-			r->side = (int []){E_EA, E_WE}[r->dir.x < 0];
+			r->side = (int []){E_WE, E_EA}[r->dir.x < 0];
 		}
 		else
 		{
@@ -84,7 +84,7 @@ void	draw_line(t_ray *r, const t_ctx *ctx, int x)
 	d.step = (double)img->size.y / d.line_h;
 	d.tex_pos = (d.start.y - SCREEN_H / 2. + d.line_h / 2.) * d.step;
 	d.tex = ivec((int)(r->wall_x * img->size.x), 0);
-	if ((r->side == E_EA) || (r->side == E_SO))
+	if ((r->side == E_EA) || (r->side == E_NO))
 		d.tex.x = img->size.x - d.tex.x - 1;
 	y = d.start.y;
 	while (y < d.end.y)

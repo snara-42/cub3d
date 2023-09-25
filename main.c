@@ -6,7 +6,7 @@
 /*   By: subaru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 09:04:01 by subaru            #+#    #+#             */
-/*   Updated: 2023/09/25 03:20:18 by subaru           ###   ########.fr       */
+/*   Updated: 2023/09/25 14:57:31 by subaru           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,6 @@ static int	init_mlx(t_mlx *mlx)
 	t_img *const	img = &mlx->img;
 
 	mlx->mlx = or_exit(mlx_init(), __func__);
-	mlx->win = or_exit(mlx_new_window(
-				mlx->mlx, SCREEN_W, SCREEN_H, "cub3d"), __func__);
 	img->size = ivec(SCREEN_W, SCREEN_H);
 	img->ptr = or_exit(mlx_new_image(
 				mlx->mlx, img->size.x, img->size.y), __func__);
@@ -44,9 +42,10 @@ static int	init_mlx(t_mlx *mlx)
 
 static int	hook_mlx(t_ctx *ctx)
 {
-	const t_mlx	*mlx = &ctx->mlx;
+	t_mlx *const	mlx = &ctx->mlx;
 
-	mlx_do_key_autorepeaton(mlx->mlx);
+	mlx->win = or_exit(mlx_new_window(mlx->mlx, SCREEN_W, SCREEN_H,
+				"cub3d"), __func__);
 	mlx_hook(mlx->win, DestroyNotify, StructureNotifyMask, &f_exit, ctx);
 	mlx_key_hook(mlx->win, &f_key_hook, ctx);
 	mlx_loop_hook(mlx->mlx, &f_draw, ctx);

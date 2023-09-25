@@ -6,7 +6,7 @@
 /*   By: subaru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 03:21:14 by subaru            #+#    #+#             */
-/*   Updated: 2023/09/25 03:21:21 by subaru           ###   ########.fr       */
+/*   Updated: 2023/09/25 13:29:56 by subaru           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,11 @@ double	key_to_rad(int key)
 	if (key == XK_w || key == XK_Up)
 		return (0.0);
 	else if (key == XK_a)
-		return (M_PI_2);
+		return (-M_PI_2);
 	else if (key == XK_s || key == XK_Down)
 		return (M_PI);
 	else if (key == XK_d)
-		return (-M_PI_2);
+		return (M_PI_2);
 	return (0.0);
 }
 
@@ -52,7 +52,7 @@ int	f_key_hook(int key, t_ctx *ctx)
 		f_exit(ctx);
 	else if (key == XK_Left || key == XK_Right)
 	{
-		*dir = vec_rot(*dir, (double []){-M_PI_4, M_PI_4}[key == XK_Left]);
+		*dir = vec_rot(*dir, (double []){M_PI_4, -M_PI_4}[key == XK_Left] * .5);
 	}
 	else if (key == XK_w || key == XK_a || key == XK_s || key == XK_d
 		|| key == XK_Up || key == XK_Down)
