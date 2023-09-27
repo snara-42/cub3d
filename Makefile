@@ -6,12 +6,13 @@
 #    By: louisnop <louisnop@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/28 13:12:23 by louisnop          #+#    #+#              #
-#    Updated: 2023/09/25 05:16:11 by subaru           ###   ########.fr        #
+#    Updated: 2023/09/28 00:03:15 by subaru           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = cub3D
 SRCS = draw.c draw_util.c ft_parseint.c ft_sscanf.c ft_str.c get_next_line.c main.c or_exit.c parse.c parse_config.c parse_map.c play_key_hook.c play_move.c vec_1.c vec_2.c
+HDRS = cub3d.h libft.h vec.h
 
 OBJDIR = ./obj
 MLXDIR = ./mlx
@@ -48,17 +49,21 @@ bonus: all
 debug: re ## add debug flags
 debug: CFLAGS += -DDEBUG -g -fsanitize=address -fsanitize=undefined
 
-test: 
+norm: ## check norminette
+	norminette -v
+	norminette $(HDRS) $(SRCS)
+
+test: ## run tests
 	zsh -c 'for f in ./cubfiles/test*.cub ; { echo "$$f"; ./$(NAME) "$$f" }'
-
-help: ## show this message
-	@grep -E '^\w+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-16s\033[0m %s\n", $$1, $$2}'
-
-.PHONY: all debug clean re debug test help 
 
 -include $(DEPS)
 
-noodle:
+help: ## show this message
+	@grep -h -E '^\w+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-16s\033[0m %s\n", $$1, $$2}'
+
+.PHONY: all debug clean re debug test help 
+
+noodle: ## 
 	@clear
 	@echo ""
 	@echo ""
