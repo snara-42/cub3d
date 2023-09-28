@@ -6,7 +6,7 @@
 /*   By: subaru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 03:21:14 by subaru            #+#    #+#             */
-/*   Updated: 2023/09/28 20:24:45 by subaru           ###   ########.fr       */
+/*   Updated: 2023/09/28 21:05:18 by subaru           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,5 +62,25 @@ int	f_key_hook(int key, t_ctx *ctx)
 	}
 	print_map(ctx);
 	f_draw(ctx);
+	return (0);
+}
+
+/*
+ |^|
+<|-|>
+ |v|
+*/
+
+int	f_mouse_hook(int button, int x, int y, t_ctx *ctx)
+{
+	(void)button;
+	if (x < SCREEN_W / 3)
+		f_key_hook(XK_Left, ctx);
+	else if (SCREEN_W / 3 * 2 < x)
+		f_key_hook(XK_Right, ctx);
+	else if (y < SCREEN_H / 2)
+		f_key_hook(XK_Up, ctx);
+	else if (SCREEN_H / 2 < y)
+		f_key_hook(XK_Down, ctx);
 	return (0);
 }

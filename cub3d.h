@@ -6,7 +6,7 @@
 /*   By: subaru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 03:26:15 by subaru            #+#    #+#             */
-/*   Updated: 2023/09/28 20:24:06 by subaru           ###   ########.fr       */
+/*   Updated: 2023/09/28 20:59:23 by subaru           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,5 +133,6 @@ void	draw_background(const t_ctx *ctx);
 int		f_exit(t_ctx *ctx);
 int		f_draw(const t_ctx *ctx);
 int		f_key_hook(int key, t_ctx *ctx);
+int		f_mouse_hook(int button, int x, int y, t_ctx *ctx);
 
 #endif

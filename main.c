@@ -6,7 +6,7 @@
 /*   By: subaru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 09:04:01 by subaru            #+#    #+#             */
-/*   Updated: 2023/09/25 14:57:31 by subaru           ###   ########.fr       */
+/*   Updated: 2023/09/28 21:00:11 by subaru           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,13 @@ static int	hook_mlx(t_ctx *ctx)
 {
 	t_mlx *const	mlx = &ctx->mlx;
 
-	mlx->win = or_exit(mlx_new_window(mlx->mlx, SCREEN_W, SCREEN_H,
-				"cub3d"), __func__);
+	mlx->win = or_exit(mlx_new_window(mlx->mlx, SCREEN_W, SCREEN_H, "cub3d"),
+			"new_window()");
+	mlx_do_key_autorepeaton(mlx->mlx);
 	mlx_hook(mlx->win, DestroyNotify, StructureNotifyMask, &f_exit, ctx);
 	mlx_key_hook(mlx->win, &f_key_hook, ctx);
-	mlx_loop_hook(mlx->mlx, &f_draw, ctx);
+	mlx_mouse_hook(mlx->win, &f_mouse_hook, ctx);
+	mlx_expose_hook(mlx->win, &f_draw, ctx);
 	return (0);
 }
 
