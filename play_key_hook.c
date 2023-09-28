@@ -6,7 +6,7 @@
 /*   By: subaru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 03:21:14 by subaru            #+#    #+#             */
-/*   Updated: 2023/09/25 13:29:56 by subaru           ###   ########.fr       */
+/*   Updated: 2023/09/28 20:24:45 by subaru           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	f_key_hook(int key, t_ctx *ctx)
 		ctx->player.pos = try_move(ctx->map, *pos,
 				vec_sca(vec_rot(*dir, key_to_rad(key)), 0.5));
 	}
-	printf("k=%d p=(%f,%f)(%f,%f)\n", key, pos->x, pos->y, dir->x, dir->y);
+	print_map(ctx);
 	f_draw(ctx);
 	return (0);
 }

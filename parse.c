@@ -6,13 +6,14 @@
 /*   By: subaru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 09:04:01 by subaru            #+#    #+#             */
-/*   Updated: 2023/09/25 03:20:18 by subaru           ###   ########.fr       */
+/*   Updated: 2023/09/28 20:46:51 by subaru           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 #include "libft.h"
 
+#include <math.h>
 #include <mlx.h>
 
 #include <stdint.h>
@@ -26,9 +27,36 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-void	print_ctx(const t_ctx *ctx)
+#define C_CLR "\x1b[0m"
+#define C_FC "\x1b[36m"
+
+void	print_map(const t_ctx *ctx)
 {
 	const t_player	p = ctx->player;
+	size_t			x;
+	size_t			y;
+
+	printf("p=pos(%f,%f),dir(%f,%f)\n", p.pos.x, p.pos.y, p.dir.x, p.dir.y);
+	y = 0;
+	while (y < MAP_H)
+	{
+		x = 0;
+		while (x < MAP_W && ctx->map[y][x])
+		{
+			if (x == (size_t)p.pos.x && y == (size_t)p.pos.y)
+				printf(C_FC"%c"C_CLR, "<^>v<^>"
+				[lround((atan2(p.dir.y, p.dir.x) + M_PI) / M_PI_2)]);
+			else
+				printf("%c", ctx->map[y][x]);
+			x++;
+		}
+		printf("%.*s", (x > 0), "\n");
+		y++;
+	}
+}
+
+void	print_ctx(const t_ctx *ctx)
+{
 	const t_img		*img;
 	size_t			i;
 
@@ -39,10 +67,7 @@ void	print_ctx(const t_ctx *ctx)
 		printf("texture [%p](%u*%u)\n", img->addr, img->size.x, img->size.y);
 	}
 	printf("C=%#06x F=%#06x\n", ctx->color[0], ctx->color[1]);
-	printf("player = (%f,%f),(%f,%f)\n", p.pos.x, p.pos.y, p.dir.x, p.dir.y);
-	i = -1;
-	while (++i < MAP_H)
-		printf("%s%s", ctx->map[i], &"\n"[!ctx->map[i][0]]);
+	print_map(ctx);
 }
 
 int	parse_file(t_ctx *ctx, const char *path)

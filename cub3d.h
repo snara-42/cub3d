@@ -6,7 +6,7 @@
 /*   By: subaru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 03:26:15 by subaru            #+#    #+#             */
-/*   Updated: 2023/09/25 03:27:01 by subaru           ###   ########.fr       */
+/*   Updated: 2023/09/28 20:24:06 by subaru           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,8 @@ typedef struct s_ctx	t_ctx;
 bool	parse_config(t_ctx *ctx, int fd);
 bool	parse_map(t_ctx *ctx, int fd);
 int		parse_file(t_ctx *ctx, const char *path);
+
+void	print_map(const t_ctx *ctx);
 void	print_ctx(const t_ctx *ctx);
 
 t_vec	try_move(const t_map map, t_vec pos, t_vec dir);
